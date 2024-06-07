@@ -4374,6 +4374,7 @@ namespace CG_OpenCV
                 int nChan = m.nChannels; // number of channels - 3
                 int padding = m.widthStep - m.nChannels * m.width; // alinhament bytes (padding)
                 int x, y;
+                int numeroPixeisPretos = 0;
                 int step = m.widthStep;
                 int pixelOriginal = 0;
                 int pixelBD = 0;
@@ -4395,12 +4396,19 @@ namespace CG_OpenCV
                             var redBD = (byte)(int)Math.Round((double)(dataPtrImagemBD + nChan * x + step * y)[2]);
 
                             pixelOriginal = (blue == 0 && green == 0 && red == 0) ? 1 : 0;
+                            numeroPixeisPretos=(blue == 0 && green == 0 && red == 0) ? numeroPixeisPretos+1 : numeroPixeisPretos+0; //incrementar o numero de pixeis pretos
                             pixelBD = (blueBD == 0 && greenBD == 0 && redBD == 0) ? 1 : 0;
                             diferenca += Math.Abs(pixelOriginal - pixelBD);
                         }
                     }
                 }
-                return (diferenca, nomeImgBd);
+                double percentagemPixeisPretos = (float)numeroPixeisPretos / (width * height);
+                if (percentagemPixeisPretos > 5)
+                {
+                    return (diferenca, nomeImgBd);
+                }
+                else { return (diferenca, "casaVazia"); }
+                
             }
         }
 

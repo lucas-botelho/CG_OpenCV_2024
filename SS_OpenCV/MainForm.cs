@@ -251,12 +251,11 @@ namespace CG_OpenCV
             }
 
             var boardCropper = new CropperService();
-            croppedBoard = boardCropper.CropBoard(img, out var cSuperior, out var cInferior, out var wasRotated);
+             croppedBoard = boardCropper.CropBoard(img, out var cSuperior, out var cInferior, out var wasRotated);
            
-            if (wasRotated)
-            {
-                croppedBoard = boardCropper.CropBoard(croppedBoard.Copy(), out cSuperior, out cInferior, out wasRotated); 
-            }
+           
+          
+            
 
             //ImageViewer.Image = croppedBoard.Bitmap;
             //ImageViewer.Image = img.Bitmap;

@@ -296,6 +296,7 @@ namespace CG_OpenCV.Services
                 int nChan = m.nChannels; // number of channels - 3
                 int padding = m.widthStep - m.nChannels * m.width; // alinhament bytes (padding)
                 int x, y;
+                int numeroPixeisPretos=0;
                 int step = m.widthStep;
                 float[] histogramX = new float[width]; //holds the percentage of 255 on that X column
                 float[] histogramY = new float[height]; //holds the percentage of 255 of that Y line
@@ -311,7 +312,7 @@ namespace CG_OpenCV.Services
                             green = (dataPtr + x * nChan + y * step)[1];
                             red = (dataPtr + x * nChan + y * step)[2];
                             var ePreto = blue == 0 && green == 0 && red == 0;
-
+                            numeroPixeisPretos = (blue == 0 && green == 0 && red == 0) ? numeroPixeisPretos + 1 : numeroPixeisPretos + 0; //incrementar o numero de pixeis pretos
                             if (ePreto) //DAR O TUNE AQUI
                             {
                                 histogramY[y] = histogramY[y] + 1;
@@ -350,6 +351,15 @@ namespace CG_OpenCV.Services
                             maxY = y;
                         }
                     }
+                    double percentagemPixeisPretos = (float)numeroPixeisPretos / (width * height);
+                    if (percentagemPixeisPretos < 5)
+                    {
+                        minY = 0;
+                        minX = 0;
+                        maxX = height;
+                        maxY = width;
+                    }
+                   
                 }
             }
 
@@ -360,6 +370,7 @@ namespace CG_OpenCV.Services
                 new Coord(minX,maxX),
                 new Coord(minY,maxY),
             };
+
         }
 
         public IEnumerable<Image<Bgr, Byte>> CropHouseFromBoard(Image<Bgr, Byte> croppedBoard)
